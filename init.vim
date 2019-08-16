@@ -69,7 +69,7 @@ map <C-n> :NERDTreeToggle<CR>
 map <C-t> :set nosplitright<CR>:TagbarToggle<CR>:set splitright<CR>
 let NERDTreeMapOpenInTab='t<ENTER>'
 " Syntax checker
-let g:neomake_python_enabled_makers = ['pylint']
+let g:neomake_python_enabled_makers = ['flake8']
 
 " AUTO-COMPLETION
 " ncm2 settings
