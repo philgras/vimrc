@@ -14,18 +14,20 @@ Plug 'HansPinckaers/ncm2-jedi'
 " Words in buffer completion
 Plug 'ncm2/ncm2-bufword'
 " Filepath completion
-Plug 'ncm2/ncm2-path'
+Plug 'ncm2/ncm2-pat:h'
 " syntax checker
 Plug 'neomake/neomake'
 " theme
 Plug 'arcticicestudio/nord-vim'
+Plug 'mhartington/oceanic-next'
 Plug 'majutsushi/tagbar'  " show tags in a bar (functions etc) for easy browsing
-" Plug 'ncm2/float-preview.nvim'
+Plug 'ryanoasis/vim-devicons' " shows icons
 call plug#end()
 
 " standards
 filetype indent on
 
+set encoding=utf-8
 set fileformat=unix
 set shortmess+=c
 
@@ -52,6 +54,7 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+" easy tab movement
 nnoremap tn :tabnew<CR>
 nnoremap tk :tabnext<CR>
 nnoremap tj :tabprev<CR>
@@ -59,10 +62,20 @@ nnoremap th :tabfirst<CR>
 nnoremap tl :tablast<CR>
 nnoremap tc :tabclose<CR>
 
+" remap escape in insert mode
 inoremap jk <Esc>
+
+" configure airline and tabline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#fnamemod = ':t'
+let g:airline#extensions#tabline#show_tab_nr = 1
+let g:airline_powerline_fonts = 1   " fix missing symbols in font
+
 " color scheme nord
 set termguicolors
 colorscheme nord
+
+" let g:airline_theme='oceaningnext'
 
 " toggle nerdtree on ctrl+n
 map <C-n> :NERDTreeToggle<CR>
