@@ -14,15 +14,20 @@ Plug 'HansPinckaers/ncm2-jedi'
 " Words in buffer completion
 Plug 'ncm2/ncm2-bufword'
 " Filepath completion
-Plug 'ncm2/ncm2-pat:h'
+Plug 'ncm2/ncm2-path'
 " syntax checker
 Plug 'neomake/neomake'
+Plug 'ctrlpvim/ctrlp.vim' " fuzzy file finding
 " theme
 Plug 'arcticicestudio/nord-vim'
 Plug 'mhartington/oceanic-next'
 Plug 'majutsushi/tagbar'  " show tags in a bar (functions etc) for easy browsing
 Plug 'ryanoasis/vim-devicons' " shows icons
 call plug#end()
+
+" path to your python 
+let g:python3_host_prog = '/usr/bin/python3'
+let g:python_host_prog = '/usr/bin/python2'
 
 " standards
 filetype indent on
@@ -33,6 +38,7 @@ set shortmess+=c
 
 set mouse=a  " change cursor per mode
 set number  " always show current line number
+set ignorecase " ignore case in commands
 set smartcase  " better case-sensitivity when searching
 set wrapscan  " begin search from top of file when nothing is found anymore
 
@@ -41,6 +47,8 @@ set tabstop=4
 set shiftwidth=4
 set fillchars+=vert:\  " remove chars from seperators
 set softtabstop=4
+set scrolloff=3
+
 
 set splitright  " i prefer splitting right and below
 set splitbelow
@@ -64,6 +72,16 @@ nnoremap tc :tabclose<CR>
 
 " remap escape in insert mode
 inoremap jk <Esc>
+
+" remap arrow keys in insert mode
+inoremap <M-l> <Right>
+inoremap <M-j> <Down>
+inoremap <M-k> <Up>
+inoremap <M-h> <Left>
+
+" remap ctrl p
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
 
 " configure airline and tabline
 let g:airline#extensions#tabline#enabled = 1
@@ -113,4 +131,6 @@ let g:jedi#popup_on_dot = 0
 let g:jedi#completions_command = ""
 let g:jedi#show_call_signatures = "1"
 let g:jedi#show_call_signatures_delay = 0
-
+let g:jedi#use_tabs_not_buffers = 1
+let g:jedi#show_call_signatures_modes = 'i'  " ni = also in normal mode
+let g:jedi#enable_speed_debugging=0
