@@ -5,16 +5,9 @@ Plug 'vim-airline/vim-airline-themes'  " themes for statusline
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'  "to highlight files in nerdtree
 Plug 'Vimjas/vim-python-pep8-indent'  "better indenting for python
 " autocompletion
-Plug 'davidhalter/jedi-vim'   " jedi for python
-Plug 'roxma/nvim-yarp'
-Plug 'ncm2/ncm2'
-" Plug 'ncm2/ncm2-jedi'
-" Fast python completion (use ncm2 if you want type info or snippet support)
-Plug 'HansPinckaers/ncm2-jedi'
-" Words in buffer completion
-Plug 'ncm2/ncm2-bufword'
-" Filepath completion
-Plug 'ncm2/ncm2-path'
+
+Plug 'Valloric/YouCompleteMe'
+
 " syntax checker
 Plug 'neomake/neomake'
 Plug 'ctrlpvim/ctrlp.vim' " fuzzy file finding
@@ -102,35 +95,9 @@ let NERDTreeMapOpenInTab='t<ENTER>'
 " Syntax checker
 let g:neomake_python_enabled_makers = ['flake8']
 
-" AUTO-COMPLETION
-" ncm2 settings
-autocmd BufEnter * call ncm2#enable_for_buffer()
-set completeopt=menuone,noselect,noinsert
-inoremap <c-c> <ESC>
-" When the <Enter> key is pressed while the popup menu is visible, it only
-" hides the menu. Use this mapping to close the menu and also start a new
-" line.
-inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-set pumheight=5
-" Use <TAB> to select the popup menu:
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" Auto-completion configuration of YouCompleteMe
+nnoremap <M-g> :YcmCompleter GoTo<CR>
+nnoremap <M-d> :YcmCompleter GetDoc<CR>
 
-" make it fast
-let ncm2#popup_delay = 5
-let ncm2#complete_length = [[1, 1]]
-" Use new fuzzy based matches
-let g:ncm2#matcher = 'substrfuzzy'
+let g:ycm_max_num_candidates = 8
 
-" Disable Jedi-vim autocompletion and enable call-signatures options
-let g:jedi#auto_initialization = 1
-let g:jedi#completions_enabled = 0
-let g:jedi#auto_vim_configuration = 0
-let g:jedi#smart_auto_mappings = 0
-let g:jedi#popup_on_dot = 0
-let g:jedi#completions_command = ""
-let g:jedi#show_call_signatures = "1"
-let g:jedi#show_call_signatures_delay = 0
-let g:jedi#use_tabs_not_buffers = 1
-let g:jedi#show_call_signatures_modes = 'i'  " ni = also in normal mode
-let g:jedi#enable_speed_debugging=0
