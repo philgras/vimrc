@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Checking required programs..."
-programs="git curl python3 cmake pip3"
+programs="clang git curl python3 cmake pip3"
 
 for program in $programs ; do
     command -v $program
@@ -14,8 +14,10 @@ for program in $programs ; do
 done
 
 echo "Installing required python packages..."
-pip3 install flake8
-pip3 install neovim
+pip3 install flake8 --user
+pip3 install neovim --user
+pip3 install jedi --user
+pip3 install yarp --user
 
 echo "Installing vim plug as package manager..."
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
@@ -24,11 +26,7 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 echo "Installing packages required by init.vim..."
 nvim +'PlugInstall --sync' +qall
 
-echo "Installing YouCompleteMe..."
-cd ~/.local/share/nvim/plugged/YouCompleteMe
-python3 install.py --clang-completer
-
 # clean up packages
 echo "Removing unused packages..."
-nvim +"PlugClean --sync" +qall
+nvim +"PlugClean! --sync" +qall
 
