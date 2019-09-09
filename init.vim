@@ -44,15 +44,23 @@ let ncm2#complete_length = [[1, 1]]
 " Use new fuzzy based matches
 let g:ncm2#matcher = 'substrfuzzy'
 " Python autocompletion
-let g:ncm2_jedi#environment = '/home/philgras/.pyenv' 
+let g:ncm2_jedi#environment = '/home/diffpriv/.pyenv' 
 " C++ autocompletion
-let g:ncm2_pyclang#library_path = '/usr/lib/libclang.so.8'
+let g:ncm2_pyclang#library_path = '/usr/lib/llvm-8/lib/libclang.so.1'
 
 let g:python3_host_prog = '/usr/bin/python3'
 let g:python_host_prog = '/usr/bin/python2'
 
 " standards
-filetype indent on
+filetype on
+
+if has("autocmd")
+
+    " setlocal changes functionality only for current buffer
+    autocmd FileType make setlocal ts=8 sts=8 sw=8 noexpandtab
+    autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
+endif
 
 set encoding=utf-8
 set fileformat=unix
@@ -64,18 +72,40 @@ set ignorecase " ignore case in commands
 set smartcase  " better case-sensitivity when searching
 set wrapscan  " begin search from top of file when nothing is found anymore
 
-set expandtab
-set tabstop=4
-set shiftwidth=4
+set expandtab  " represents tabs with spaces
+set tabstop=4  " length of a tab character in columns when not being represented by spaces
+set shiftwidth=4  " amount of whitespace to insert when using > and < indentation commands
 set fillchars+=vert:\  " remove chars from seperators
-set softtabstop=4
+set softtabstop=4  " backspace removes up to 4 whitespace characters, precedes tabstop command, i.e. when tab is hit 4 spaces are inserted, but softtabstop merges them to tab characters if possible
 set scrolloff=3
 
-set splitright  " i prefer splitting right and below
+" script for deleting trailing whitespaces, found on vimcast.org
+function! <SID>StripTrailingWhitespaces()
+    " Preparation: save last search, and cursor position.
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    " Do the business:
+    %s/\s\+$//e
+    " Clean up: restore previous search history, and cursor position
+    let @/=_s
+    call cursor(l, c)
+endfunction
+nnoremap <silent> <F5> :call <SID>StripTrailingWhitespaces()<CR>
+
+set splitright  " prefer splitting right and below
 set splitbelow
 
 set hlsearch  " highlight search and search while typing
 set incsearch
+
+" show white spaces with symbols
+nmap ws :set list!<CR>
+set listchars=tab:▸\ ,trail:-,eol:¬
+
+" insert newline without entering insert mode
+nnoremap <S-Enter> O<Esc>
+nnoremap <CR> o<Esc>
 
 " easy split movement
 nnoremap <C-h> <C-w>h
@@ -103,6 +133,7 @@ inoremap <M-h> <Left>
 " remap ctrl p
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'
 
 " configure airline and tabline
 let g:airline#extensions#tabline#enabled = 1
@@ -119,7 +150,15 @@ map <C-n> :NERDTreeToggle<CR>
 map <C-t> :set nosplitright<CR>:TagbarToggle<CR>:set splitright<CR>
 let NERDTreeMapOpenInTab='t<ENTER>'
 let NERDTreeShowHidden=1
+
 " Syntax checker
 let g:neomake_python_enabled_makers = ['flake8']
 
-
+let g:neomake_cpp_enabled_makers = ['clang']
+let g:neomake_cpp_clang_maker = {
+   \ 'exe': 'clang++',
+   \ 'args': ['-std=c++17', '-Wall', '-pedantic'] 
+   \ }
+" Full config: when writing or reading a buffer, and on changes in insert and
+" normal mode (after 1s; no delay when writing).
+" call neomake#configure#automake('nrwi', 500)
