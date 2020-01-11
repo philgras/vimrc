@@ -14,11 +14,15 @@ Plug 'ncm2/ncm2-jedi'
 Plug 'ncm2/ncm2-bufword'
 Plug 'ncm2/ncm2-path'
 
+Plug 'arakashic/chromatica.nvim' " cpp syntax highlighting
+Plug 'numirias/semshi' "python syntax highlighting
+
 " syntax checker
 Plug 'neomake/neomake'
 Plug 'ctrlpvim/ctrlp.vim' " fuzzy file finding
 " theme
 Plug 'arcticicestudio/nord-vim'
+Plug 'rakr/vim-one'
 Plug 'majutsushi/tagbar'  " show tags in a bar (functions etc) for easy browsing
 Plug 'ryanoasis/vim-devicons' " shows icons
 call plug#end()
@@ -43,13 +47,6 @@ let ncm2#popup_delay = 5
 let ncm2#complete_length = [[1, 1]]
 " Use new fuzzy based matches
 let g:ncm2#matcher = 'substrfuzzy'
-" Python autocompletion
-let g:ncm2_jedi#environment = '/home/diffpriv/.pyenv' 
-" C++ autocompletion
-let g:ncm2_pyclang#library_path = '/usr/lib/llvm-8/lib/libclang.so.1'
-
-let g:python3_host_prog = '/usr/bin/python3'
-let g:python_host_prog = '/usr/bin/python2'
 
 " standards
 filetype on
@@ -143,22 +140,49 @@ let g:airline_powerline_fonts = 1   " fix missing symbols in font
 
 " color scheme nord
 set termguicolors
-colorscheme nord
+colorscheme one
+set background=dark
+" colorscheme nord
+let g:airline_theme='one'
 
 " toggle nerdtree on ctrl+n
 map <C-n> :NERDTreeToggle<CR>
 map <C-t> :set nosplitright<CR>:TagbarToggle<CR>:set splitright<CR>
 let NERDTreeMapOpenInTab='t<ENTER>'
 let NERDTreeShowHidden=1
+" Full config: when writing or reading a buffer, and on changes in insert and
+" normal mode (after 1s; no delay when writing).
+" call neomake#configure#automake('nrwi', 500)
+
+
+" ####### PYTHON SPECIFIC CONFIGURATION #######
 
 " Syntax checker
 let g:neomake_python_enabled_makers = ['flake8']
 
+" Python autocompletion
+let g:ncm2_jedi#environment = '/home/diffpriv/.pyenv' 
+let g:python3_host_prog = '/usr/bin/python3'
+let g:python_host_prog = '/usr/bin/python2'
+
+
+"####### CPP SPECIFIC CONFIGURATION#########
+
+" C++ autocompletion
+let g:ncm2_pyclang#library_path = '/usr/lib/llvm-8/lib/libclang.so.1'
+let g:chromatica#libclang_path = '/usr/lib/llvm-8/lib/libclang.so.1'
+let g:chromatica#enable_at_startup = 1
+
+" clang neomake syntax checking and semantic check
 let g:neomake_cpp_enabled_makers = ['clang']
 let g:neomake_cpp_clang_maker = {
    \ 'exe': 'clang++',
    \ 'args': ['-std=c++17', '-Wall', '-pedantic'] 
    \ }
-" Full config: when writing or reading a buffer, and on changes in insert and
-" normal mode (after 1s; no delay when writing).
-" call neomake#configure#automake('nrwi', 500)
+
+" clang tidy
+function! Formatonsave()
+  let l:formatdiff = 1
+  pyf /usr/share/clang/clang-format-8/clang-format.py
+endfunction
+autocmd BufWritePre *.hpp,*.h,*.cc,*.cpp call Formatonsave()
