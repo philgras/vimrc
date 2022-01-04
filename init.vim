@@ -14,7 +14,7 @@ Plug 'ryanoasis/vim-devicons' " shows icons
 call plug#end()
 
 " standards
-filetype on
+filetype plugin on
 
 if has("autocmd")
     " setlocal changes functionality only for current buffer
@@ -116,6 +116,12 @@ nmap <F8> :TagbarToggle<CR>
 " File searchs
 map <C-p> :Files<CR>
 
+" Auto completion
+set omnifunc=syntaxcomplete#Complete
+"au BufNewFile,BufRead,BufEnter *.py, set omnifunc=jedi#completions
+"inoremap <C-Space> <C-x><C-o>
+"inoremap <C-@> <C-Space>
+
 " Ale Configuration
 """" Better formatting fo worp/ale
 let g:ale_echo_msg_error_str = 'E'
@@ -130,5 +136,6 @@ let g:ale_linters = {
 let g:ale_set_highlights = 0
 
 " Jedi Vim configuration
+" let g:jedi#auto_initialization = 0
 let g:jedi#popup_on_dot = 0
 
